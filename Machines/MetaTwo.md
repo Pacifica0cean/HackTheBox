@@ -15,14 +15,20 @@ More to be added as I poke this machine more.
 
 • <b> BOOKINGPRESS EXPLOIT </b> https://wpscan.com/vulnerability/388cd42d-b61a-42a4-8604-99b812db2357
 
+• <b> USING SQLMAP FOR POST INJECTION </b> https://hackertarget.com/sqlmap-post-request-injection/ , https://edricteo.com/sqlmap-commands/
 
+• <b> CVE-2021-29447 </b> https://nvd.nist.gov/vuln/detail/CVE-2021-29447
+
+• <b> WORDPRESS EXPLOIT LIST </b> https://wpscan.com/wordpress/562
 
 <h2> Walkthrough </h2>
 
 I begin with a fairly aggressive Nmap. This took some time to get done, but when done, three ports opened themselves up to me.
+
 ![image](https://user-images.githubusercontent.com/115663211/199806271-3f6008c5-5725-42b0-a86e-e401cc60c056.png)
 
 All are incredibly interesting, with SSH being the first thing I try to attack with the standard anonymous login.
+
 ![image](https://user-images.githubusercontent.com/115663211/199806452-fa01f296-4595-492a-9def-3fac2fc9eea7.png)
 
 No luck here. That's fine, we still have two other ports that we can investigate further. I back out of the SSH port and head over to ftp. These are usually the most fragile ports on easy machines.
@@ -63,9 +69,52 @@ A (very recent) CVE entry on this WordPress exploit! It shows the version, <1.01
 
 This proof of concept shows the /wp-admin directory, which will very much likely need us to be authenticated. This, of course, poses a problem, meaning we must attack the web-end first before we can get any sort of luck with the SQL injection. There is also some information in the Proof of concept about 'nonce' (har, har.) .. as well as _wpnonce.
 
-I check around online and don't find all too much of interest regarding it, but looking into the source code of the website brings me to this.
+The next test is to try running the curl command with the information for wpnonce. We find that information in the source code of that events page.
 
--- TBC --
+![image](https://user-images.githubusercontent.com/115663211/199824650-bd0eecc2-14fd-41a2-963f-6c2cf7aaef3f.png)
 
+We have our data. I decide i'm going to write the burp repeater packet myself, taking a few headers I found online as well as the form information from the example given above. 
 
+![image](https://user-images.githubusercontent.com/115663211/199826935-e90a0e3e-42f6-4984-91c0-bd0fae8c3c53.png)
 
+Its nasty, yet it works. So what exactly does this give us? Well, a payload for a start. That's exactly what this was written as. We just now need to find where we're going to push the payload. Going back to earlier, we found that a DB was listed in Wappalyzer. So, we could probably shoot this payload off using sqlmap or one of it's buddy programs. I save the POST request to a random file, then move to sqlmap.
+
+At this point I did some further digging outside of the environment, looking into the request I was actually writing. I found that it was, indeed, calling out to a DB. I modified the payload a little bit to suit some information I'd found online.
+
+![image](https://user-images.githubusercontent.com/115663211/199828517-8689bea0-3f54-48a4-a610-ba1aeccec87f.png)
+
+Good news. By changing our payload to suite what was requested online, I was able to get some information from sqlmap. It chucked all of its log information into a file for us to conveniently read. Now, it's time to use the --dbs flag, getting all databases.
+
+![image](https://user-images.githubusercontent.com/115663211/199828846-3df6ab64-2030-4f27-af2b-a7a0f1c0e144.png)
+
+We have two. No point ignoring one in favor of the other, so I start with blog first. I had to do some switch research on sqlmap to figure out how to read this database, but let's have a look at it regardless.
+
+![image](https://user-images.githubusercontent.com/115663211/199829725-ee180808-fff9-4db0-a16d-cfcb6940ffa3.png)
+
+We're given twenty seven tables to pick apart, but i'm pretty sure you know which one we're going for here. I take to opening up the wp_users table to see what's inside, having to, again, do some switch research to figure this out (all these switches to remember are confusing!)
+
+![image](https://user-images.githubusercontent.com/115663211/199830101-dac189eb-5d71-4194-a46c-13d2a7639002.png)
+
+We have two users that are dumped out when we run our commands. The url user utilises 'admin' as it's login, with the one below, <blank> using 'manager' as it's login. Regardless, the passwords are hashed. Which... Doesn't do us much good. That's fine, we have john, a hash decrypter which is infamous on my virtual machine for breaking down. So let's see if it has the guts to take this hash.
+  
+![image](https://user-images.githubusercontent.com/115663211/199831013-3cc7cce7-e76d-4e6a-9610-d3af5bc81996.png)
+
+By absolute luck, my john didn't crash AND I got the hash to password number two! So we have the combo of 'manager' and 'partylickarockstar' ... Which is great, so where do we use these credentials? Well, we can try SSH first.
+
+![image](https://user-images.githubusercontent.com/115663211/199831587-e76d80ef-0455-4d14-a691-447fb118a253.png)
+
+No dice on that, what about FTP?
+
+![image](https://user-images.githubusercontent.com/115663211/199831737-96948f7c-cffb-484a-9ba5-8e4ca3afd1e2.png)
+
+Okay, so the last option I could think of is that it's a web based login. I checked around online, finding a series of wordpress directories that could be used for login such as /login/, /admin/ and /wp-login.php ... The first two didn't work, but /wp-login.php did. Which, brought me to the splash.
+
+![image](https://user-images.githubusercontent.com/115663211/199832071-32c8c66e-c5f0-4d2d-94f3-6def74dd0213.png)
+![image](https://user-images.githubusercontent.com/115663211/199832114-514ea20d-0d0b-4600-9e78-78dd1e720c7a.png)
+
+It let's us in! Wappalyzer then showed that WordPress was running 5.6.2. I can check online for any particular exploits that are known for that version. I check CVE's first just like normal.
+
+![image](https://user-images.githubusercontent.com/115663211/199832760-c37c22dc-48a8-4a10-ba81-9aa9c1189dda.png)
+![image](https://user-images.githubusercontent.com/115663211/199832898-af85aa43-5aab-44c7-984a-cf5c196f4f8f.png)
+
+-- TBC, RESEARCH ONGOING --
