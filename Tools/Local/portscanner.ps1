@@ -1,4 +1,6 @@
 ## Variable declaration.
+# Some taken from the RTFM book.
+
 $ports=()
 $ip ="<IP>"
 
