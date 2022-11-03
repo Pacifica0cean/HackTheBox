@@ -1,5 +1,9 @@
-<h1> NOTE </h1>
+<h1> THE TOOLBOX </h1>
 
-Some scripts in this folder will have been taken from the infamous 'Red Team Field Manual v2' with some being my own implementation.
+This Tools folder is categorised by the following:
 
-Any and all scripts are to be used only in a lab environment and have not been put into function in the real world.
+• <b> ONLINE: </b> The tool in question has been taken from online and stored away for ease of use. I do not take credit for these in any way.
+
+• <b> LOCAL: </b> I've written these myself or taken inspiration from a book.
+
+Have fun with these, and happy scripting!
