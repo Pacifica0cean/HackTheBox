@@ -4,9 +4,10 @@ An <b>EASY</b> machine.
 
 <h4>Summary</h4>
 
-This machine isn't as easy as the print on the tin says. This machine involves WordPress, a web platform that is often quite exploitable. It also utilizes a fairly recently found exploit, using POST to inject some malicious data.
+This machine isn't as easy as the print on the tin says. This machine involves WordPress, a web platform that is often quite exploitable. It also utilizes a fairly recently found exploit, using POST to inject some malicious data, as well as another exploit for abusing the Media Library.
 
-More to be added as I poke this machine more.
+
+More to be added as I poke this machine more, currently in the process of figuring out how to exploit this.
 
 
 <h2> Documentation </h2>
@@ -67,13 +68,11 @@ A (very recent) CVE entry on this WordPress exploit! It shows the version, <1.01
 
 ![image](https://user-images.githubusercontent.com/115663211/199812493-7111a99d-837c-422d-a5c4-0ead50b2f6b5.png)
 
-This proof of concept shows the /wp-admin directory, which will very much likely need us to be authenticated. This, of course, poses a problem, meaning we must attack the web-end first before we can get any sort of luck with the SQL injection. There is also some information in the Proof of concept about 'nonce' (har, har.) .. as well as _wpnonce.
-
-The next test is to try running the curl command with the information for wpnonce. We find that information in the source code of that events page.
+This proof of concept shows a curl request that sends off that injection using the details listed in the CVE above. As it's a POST request, this information that it's curling is going to very much just be sent in a packet to the website, with those fields in the speechmarks likely being the parameters for that injection. Originally, I just tried shooting off the curl request without changing any information, but I found that the '_wpnonce' had to actually be amended and changed to my own. I found that, in the source code of the events pagem like so.
 
 ![image](https://user-images.githubusercontent.com/115663211/199824650-bd0eecc2-14fd-41a2-963f-6c2cf7aaef3f.png)
 
-We have our data. I decide i'm going to write the burp repeater packet myself, taking a few headers I found online as well as the form information from the example given above. 
+We have our data. I couldn't figure out just what I was doing wrong in the command line for the curl request to not be sent over to burp, so I took a generic empty packet, modified it according to a simple POST request and shot it off to the website, allowing the fields in my POST request to change accordingly, (notably the Content-Length).
 
 ![image](https://user-images.githubusercontent.com/115663211/199826935-e90a0e3e-42f6-4984-91c0-bd0fae8c3c53.png)
 
