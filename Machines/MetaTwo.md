@@ -22,6 +22,8 @@ More to be added as I poke this machine more, currently in the process of figuri
 
 • <b> WORDPRESS EXPLOIT LIST </b> https://wpscan.com/wordpress/562
 
+• <b> XXE MEDIA LIBRARY EXPLOIT </b> https://blog.sonarsource.com/wordpress-xxe-security-vulnerability/
+
 <h2> Walkthrough </h2>
 
 I begin with a fairly aggressive Nmap. This took some time to get done, but when done, three ports opened themselves up to me.
