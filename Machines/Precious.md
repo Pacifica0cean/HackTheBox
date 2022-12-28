@@ -4,9 +4,24 @@ An <b>EASY</b> machine.
 
 <h4>Summary</h4>
 
+Merry Christmas!
+
+This machine involved analyzing the metadata of a file that's downloaded to the machine. You then exploit a series of YAML and Ruby faults to gain privileged access in the machine. It's quick, it's simple, it's fun!
+
+Overall, this machine was far easier than I expected. It took a bit of digging for some of the exploits as they're not all publicized at this time, but using github was easy. You can use the documents below for information.
+
+Have fun with this one!
+
 
 <h2> Documentation </h2>
 
+• <b>PDFKIT 0.8.6 EXPLOIT</b> https://security.snyk.io/vuln/SNYK-RUBY-PDFKIT-2869795
+
+• <b>REVERSE SHELL MAKER</b> https://www.revshells.com/
+
+• <b>YAML DESERIALIZATION</b> https://book.hacktricks.xyz/pentesting-web/deserialization/python-yaml-deserialization
+
+• <b>YAML PAYLOAD</b> https://gist.github.com/staaldraad/89dffe369e1454eedd3306edc8a7e565#file-ruby_yaml_load_sploit2-yaml
 
 <h2> Walkthrough </h2>
 
