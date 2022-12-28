@@ -78,6 +78,8 @@ By modifying just a snippet of code in the original creation, we can run this ru
 
 We now have root. We can go ahead, pinch the root flag, call it a day. This machine was pretty interesting, changing the permissions of the bash binary itself is something I've not done before.
 
+<h2> Closing Remarks </h2>
 
+This machine was a particularly interesting one. The biggest gripe I have with this is the introduction of Ruby, but you can find all the exploits needed online with a simple google search. Nothing to break my toes.
 
 
