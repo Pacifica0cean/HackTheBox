@@ -48,7 +48,7 @@ This template can be used with our URL to make this:
 
 ![image](https://user-images.githubusercontent.com/115663211/209874265-b8b82363-0fd5-4143-a7f7-08f52f539248.png)
 
-By creating a bash revere shell using the amazing www.revshells.com we were then able to successfully get a connection as user 'ruby.' Let's start by enumerating the local filespace and see what we can find.
+By creating a bash reverse shell using the amazing www.revshells.com we were then able to successfully get a connection as user 'ruby.' Let's start by enumerating the local filespace and see what we can find.
 
 ![image](https://user-images.githubusercontent.com/115663211/209874475-88142cfe-4a76-468e-a3bb-6b8f1a23ccd3.png)
 
